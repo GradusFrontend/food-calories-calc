@@ -13,8 +13,8 @@
                 <img src="icons/logo.svg" alt="Логотип">
             </div>
             <nav class="header__links">
-                <a href="#" class="header__link">Доставка питания</a>
-                <a href="#" class="header__link">Второй пункт</a>
+                <a href="#order" class="header__link">Доставка питания</a>
+                <a href="#calculating" class="header__link">Второй пункт</a>
             </nav>
         </div>
         <div class="header__right-block">
@@ -132,7 +132,7 @@
 
     <div class="divider"></div>
 
-    <div class="calculating">
+    <div id="calculating" class="calculating">
         <div class="container">
             <h2 class="title">Рассчитаем вашу потребность в калориях?
             </h2>
@@ -219,10 +219,10 @@
         </div>
     </div>
 
-    <div class="order">
+    <div id="order" class="order">
         <div class="container">
             <div class="title">Заказывай пробный день прямо сейчас!</div>
-            <form action="#" class="order__form">
+            <form class="order__form" name="order">
                 <input required placeholder="Ваше имя" name="name" type="text" class="order__input">
                 <input required placeholder="Ваш номер телефона" name="phone" type="phone" class="order__input">
                 <img src="icons/right.svg" alt="right">
@@ -290,7 +290,7 @@
     <div class="modal fade">
         <div class="modal__dialog">
             <div class="modal__content">
-                <form action="#">
+                <form name="modalForm">
                     <div data-close class="modal__close">&times;</div>
                     <div class="modal__title">Мы свяжемся с вами как можно быстрее!</div>
                     <input required placeholder="Ваше имя" name="name" type="text" class="modal__input">

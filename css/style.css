@@ -1,5 +1,8 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap&subset=cyrillic-ext);
 
+html {
+    scroll-behavior: smooth;
+}
 * {
     box-sizing: border-box;
     margin: 0;
@@ -542,7 +545,7 @@ a {
     width: 280px;
     height: 50px;
     background: #fff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, .2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     border: none;
     font-size: 18px;
     text-align: center;
@@ -736,4 +739,9 @@ a {
     to {
         opacity: 1;
     }
+}
+
+.order__input_error {
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4) !important;
+    color: rgba(255, 0, 0, 0.692) !important;
 }

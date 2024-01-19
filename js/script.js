@@ -134,45 +134,149 @@ actions.forEach((div, idx) => {
     }
 })
 
+let order = document.forms.order
+let orderInputs = document.order.querySelectorAll('input')
 
-let minutesViews = document.querySelector('#minutes')
-let secondsViews = document.querySelector('#seconds')
-let minutes = 59
-let seconds = 59
+let modalForm = document.forms.modalForm
+let modalInputs = document.modalForm.querySelectorAll('input')
 
-setInterval(() => {
-    if (seconds === 0) {
-        seconds = 60
-    }
-    seconds--
-    secondsViews.innerHTML = seconds
-}, 1000)
+const patterns = {
+    name: /^[a-z ,.'-]+$/i,
+    phone: /^9989[012345789][0-9]{7}$/,
+}
 
-setInterval(() => {
-    if (minutes === 0) {
-        minutes = 60
-    }
-    minutes--
-    minutesViews.innerHTML = minutes
-
-    var duration = 15 * 1000;
-    var animationEnd = Date.now() + duration;
-    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-    function randomInRange(min, max) {
-        return Math.random() * (max - min) + min;
-    }
-
-    var interval = setInterval(function () {
-        var timeLeft = animationEnd - Date.now();
-
-        if (timeLeft <= 0) {
-            return clearInterval(interval);
+orderInputs.forEach((inp, idx) => {
+    inp.onkeyup = () => {
+        let reg = patterns[inp.name]
+        console.log(inp);
+        if (!reg.test(inp.value)) {
+            inp.classList.add('order__input_error')
+        } else {
+            inp.classList.remove('order__input_error')
         }
 
-        var particleCount = 50 * (timeLeft / duration);
-        // since particles fall down, start a bit higher than random
-        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
-        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
-    }, 250);
-}, 59000)
+        if (inp.value.length === 0) {
+            inp.classList.remove('order__input_error')
+        }
+    }
+})
+
+let orderErrors = 0
+order.onsubmit = (event) => {
+    event.preventDefault();
+
+    orderInputs.forEach(inp => {
+        if (inp.classList.contains('order__input_error')) {
+            orderErrors++
+        }
+    })
+
+    if (orderErrors > 0) {
+        alert('Форма заполнена неправильно!')
+    } else {
+        alert('Отлично, мы вам перезвоним!')
+    }
+
+    orderErrors = 0
+}
+
+modalInputs.forEach((inp, idx) => {
+    inp.onkeyup = () => {
+        let reg = patterns[inp.name]
+        console.log(inp);
+        if (!reg.test(inp.value)) {
+            inp.classList.add('order__input_error')
+        } else {
+            inp.classList.remove('order__input_error')
+        }
+
+        if (inp.value.length === 0) {
+            inp.classList.remove('order__input_error')
+        }
+    }
+})
+let modalErrors = 0
+modalForm.onsubmit = (event) => {
+    event.preventDefault();
+
+    modalInputs.forEach(inp => {
+        if (inp.classList.contains('order__input_error')) {
+            modalErrors++
+        }
+    })
+
+    if (modalErrors > 0) {
+        alert('Форма заполнена неправильно!')
+    } else {
+        alert('Отлично, мы вам перезвоним!')
+    }
+
+    modalErrors = 0
+}
+
+let deadline = '2024-01-31 00:00'
+
+function remaining(deadline) {
+    let t = Date.parse(deadline) - Date.parse(new Date());
+
+    let seconds = Math.floor((t / 1000) % 60)
+    let minutes = Math.floor((t / 1000 / 60) % 60)
+    let hours = Math.floor((t / 1000 / 60 / 60) % 24)
+    let days = Math.floor(t / 1000 / 60 / 60 / 24)
+
+    return {
+        total: t,
+        days: days,
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds
+    };
+}
+
+function updateTimer() {
+    const daysView = document.querySelector('#days')
+    const hoursView = document.querySelector('#hours')
+    const minutesView = document.querySelector('#minutes')
+    const secondsView = document.querySelector('#seconds')
+
+    function updateTime() {
+        let t = remaining(deadline);
+
+        daysView.innerHTML = t.days;
+        hoursView.innerHTML = t.hours
+        minutesView.innerHTML = t.minutes
+        secondsView.innerHTML = t.seconds
+
+        if (t.total <= 0) {
+            clearInterval(interval);
+        }
+
+        if (t.seconds === 0) {
+            var duration = 15 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var intervalConf = setInterval(function () {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(intervalConf);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                // since particles fall down, start a bit higher than random
+                confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+                confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+            }, 250);
+        }
+    }
+
+    updateTime();
+    let interval = setInterval(updateTime, 1000);
+}
+
+updateTimer()
